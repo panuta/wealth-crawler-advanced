@@ -95,9 +95,9 @@ class SpiderJobLog(Model):
     @classmethod
     def logs_dict(cls, job_id=None):
         if job_id:
-            logs = SpiderJobLog.select().where(SpiderJobLog.job_id == job_id)
+            logs = SpiderJobLog.select().where(SpiderJobLog.job_id == job_id).order_by(SpiderJobLog.date_started.desc())
         else:
-            logs = SpiderJobLog.select()
+            logs = SpiderJobLog.select().order_by(SpiderJobLog.date_started.desc())
         return [log.to_dict() for log in logs]
 
 

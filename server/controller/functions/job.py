@@ -43,7 +43,7 @@ def run_job(job):
             'project': project_name,
             'spider': job.spider_name,
             'job_id': job.job_id,
-            **job.parameters,
+            'parameters': job.parameters,
         }, app=app)
 
         entry.save().reschedule()

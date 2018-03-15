@@ -2,6 +2,7 @@ import requests
 
 from server import config
 from server.celery_app import app
+from server.controller.models import SpiderJobLog
 
 
 @app.task
@@ -17,3 +18,6 @@ def crawl(project_name, spider_name, job_id):
     if resp_json.get('status', '') != 'ok':
         # TODO : test exception
         raise Exception('Scrapyd response with error: {}', resp_json.get('message', ''))
+
+    log = SpiderJobLog(job_id=job_id, task_id=resp_json.get('jobid'))
+    log.save()

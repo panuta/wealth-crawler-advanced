@@ -1,1 +1,1 @@
-from server.tasks import spiders
+from server.tasks import spiders, scrapyd

@@ -6,6 +6,13 @@ from server.utils import datetime_to_str
 from ..database import db
 
 
+class Project(Model):
+    project_name = CharField()
+
+    class Meta:
+        database = db
+
+
 class Spider(Model):
     name = CharField()
     project_name = CharField()
@@ -59,7 +66,27 @@ class SpiderJob(Model):
         self.parameters_json = json.dumps(parameters_dict)
 
 
+class SpiderJobLog(Model):
+    job_id = CharField()
+    task_id = CharField(null=True)
+    status = CharField(null=True)
+    date_started = DateTimeField(null=True)
+    date_finished = DateTimeField(null=True)
+
+    class Meta:
+        database = db
+
+    def to_dict(self):
+        return {
+            'job_id': self.job_id,
+            'task_id': self.task_id,
+            'status': self.status,
+        }
+
+
 db.create_tables([
+    Project,
     Spider,
     SpiderJob,
+    SpiderJobLog,
 ], safe=True)

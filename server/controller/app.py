@@ -5,7 +5,7 @@ import json
 
 from crontab import CronSlices
 
-from server.controller.functions.job import create_job, run_job
+from server.controller.functions.job import create_job, run_job, delete_job
 from server.controller.models import Spider, SpiderJob
 
 

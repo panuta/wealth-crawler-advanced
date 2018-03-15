@@ -9,7 +9,7 @@ from datetime import datetime
 from git import Repo, GitCommandError
 
 from server import config
-from server.controller.models import Spider
+from server.controller.models import Spider, Project
 from server.utils import load_module_from_file
 
 
@@ -17,7 +17,7 @@ def pred(c):
     return inspect.isclass(c) and c.__module__ == pred.__module__
 
 
-def _persist_spiders(clone_path, project_name):
+def _persist_spiders(clone_path, project):
     deploy_date = datetime.now()
 
     # Load SPIDER_MODULES settings from scrapy settings file
@@ -57,7 +57,7 @@ def _persist_spiders(clone_path, project_name):
                 except Spider.DoesNotExist:
                     spider = Spider(
                         name=classmember[1].name,
-                        project_name=project_name,
+                        project_name=project.project_name,
                         date_deployed=deploy_date,
                     )
                 else:
@@ -101,10 +101,12 @@ def deploy(clone_url, branch=None):
     else:
         raise Exception('scrapy.cfg not found or project name in scrapy.cfg not found')
 
+    project, created = Project.get_or_create(project_name=project_name)
+
     # Keep spiders data in database
     # ------------------------------------------------------------------------------------------------------------------
 
-    _persist_spiders(clone_path, project_name)
+    _persist_spiders(clone_path, project)
 
     # Call 'scrapyd-deploy' to create egg file and deploy to scrapyd
     # ------------------------------------------------------------------------------------------------------------------

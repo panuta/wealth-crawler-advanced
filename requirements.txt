@@ -1,6 +1,9 @@
 # requirements for IDEs only
 
 falcon
+
+python-dateutil
+requests
 shortuuid
 
 gitpython

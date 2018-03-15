@@ -1,7 +1,9 @@
 falcon
 gunicorn
-
 ujson
+
+python-dateutil
+requests
 shortuuid
 
 gitpython

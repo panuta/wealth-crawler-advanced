@@ -6,7 +6,7 @@ import json
 from crontab import CronSlices
 
 from server.controller.functions.job import create_job, run_job, delete_job
-from server.controller.models import Spider, SpiderJob
+from server.controller.models import Spider, SpiderJob, SpiderJobLog
 
 
 class CrawlerResource:
@@ -17,8 +17,10 @@ class CrawlerResource:
         response.body = json.dumps({
             'status': 'success',
             'spiders': Spider.spiders_dict(),
-            'jobs': [],
-            'logs': [],
+            'jobs': {
+                'scheduled': SpiderJob.jobs_scheduled_dict(),
+            },
+            'logs': SpiderJobLog.logs_dict(),
         })
         response.status = falcon.HTTP_200
 

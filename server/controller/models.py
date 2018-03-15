@@ -44,8 +44,11 @@ class SpiderJob(Model):
         database = db
 
     @classmethod
-    def jobs_scheduled_dict(cls, spider_name):
-        jobs = SpiderJob.select().where(SpiderJob.spider_name == spider_name, ~(SpiderJob.schedule >> None))
+    def jobs_scheduled_dict(cls, spider_name=None):
+        if spider_name:
+            jobs = SpiderJob.select().where(SpiderJob.spider_name == spider_name, ~(SpiderJob.schedule >> None))
+        else:
+            jobs = SpiderJob.select().where(~(SpiderJob.schedule >> None))
         return [job.to_dict() for job in jobs]
 
     def to_dict(self):
@@ -68,6 +71,8 @@ class SpiderJob(Model):
 
 class SpiderJobLog(Model):
     job_id = CharField()
+    spider_name = CharField()
+    parameters = CharField(null=True)
     task_id = CharField(null=True)
     status = CharField(null=True)
     date_started = DateTimeField(null=True)
@@ -79,9 +84,21 @@ class SpiderJobLog(Model):
     def to_dict(self):
         return {
             'job_id': self.job_id,
+            'spider_name': self.spider_name,
+            'parameters': self.parameters,
             'task_id': self.task_id,
             'status': self.status,
+            'date_started': datetime_to_str(self.date_started),
+            'date_finished': datetime_to_str(self.date_finished),
         }
+
+    @classmethod
+    def logs_dict(cls, job_id=None):
+        if job_id:
+            logs = SpiderJobLog.select().where(SpiderJobLog.job_id == job_id)
+        else:
+            logs = SpiderJobLog.select()
+        return [log.to_dict() for log in logs]
 
 
 db.create_tables([

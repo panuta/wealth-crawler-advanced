@@ -1,4 +1,4 @@
-FROM python:2.7-alpine3.6
+FROM python:2.7-alpine3.7
 ENV PYTHONUNBUFFERED 1
 
 # System dependencies
@@ -17,8 +17,6 @@ RUN apk add --no-cache \
         python3 \
         python3-dev \
         supervisor
-
-# NOTE: 'curl-dev' see -> https://github.com/JJ/alpine-perl6/issues/3
 
 # Set Timezone
 RUN cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime

@@ -1,11 +1,20 @@
-falcon==1.4.1
-celery==4.1.0
-celery-redbeat==0.11.1
-redis==2.10.6
+# requirements for IDEs only
 
-peewee==3.1.5
+falcon
+shortuuid
 
-Scrapy==1.5.0
-scrapyd==1.2.0
+gitpython
+python-crontab
 
-google-cloud-datastore==1.6.0
+# Database
+peewee
+
+# Tasks
+celery[redis]
+celery-redbeat
+
+# Scrapy
+scrapy
+python-scrapyd-api
+
+google-cloud-datastore

@@ -1,18 +1,20 @@
-celery[redis]
-celery-redbeat
-
-requests
-
 falcon
 gunicorn
-ujson
 
-peewee
+ujson
 shortuuid
 
 gitpython
 python-crontab
 
+# Database
+peewee
+
+# Tasks
+celery[redis]
+celery-redbeat
+
+# Scrapy
 scrapy
 scrapyd-client
 python-scrapyd-api

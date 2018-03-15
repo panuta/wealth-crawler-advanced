@@ -1,4 +1,7 @@
-.idea
+# Docker volumes
+.redis
+.scrapyd
+.server
 
 ### Python template
 # Byte-compiled / optimized / DLL files

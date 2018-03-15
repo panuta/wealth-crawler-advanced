@@ -62,7 +62,7 @@ class SpiderJob(Model):
 
     @property
     def parameters(self):
-        return json.loads(self.parameters_json)
+        return json.loads(self.parameters_json) if self.parameters_json else {}
 
     @parameters.setter
     def parameters(self, parameters_dict):

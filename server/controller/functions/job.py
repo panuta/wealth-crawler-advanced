@@ -40,15 +40,16 @@ def run_job(job):
         interval = crontab(minute, utc_hour, day_of_week, day_of_month, month_of_year)
 
         entry = RedBeatSchedulerEntry(job.job_id, 'server.tasks.spiders.crawl', interval, kwargs={
-            'project_name': project_name,
-            'spider_name': job.spider_name,
+            'project': project_name,
+            'spider': job.spider_name,
             'job_id': job.job_id,
+            **job.parameters,
         }, app=app)
 
         entry.save().reschedule()
 
     else:
-        crawl.delay(project_name, job.spider_name, job.job_id)
+        crawl.delay(project_name, job.spider_name, job.job_id, job.parameters)
 
 
 def _get_entry_from_job(job):

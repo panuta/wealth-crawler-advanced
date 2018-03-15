@@ -65,6 +65,8 @@ class SpiderResource:
 
 
 class SpiderJobResource:
+    JOB_PARAMETER_RESERVED_KEYWORDS = {'project', 'spider', 'job_id'}
+
     def on_get(self, request, response):
         """
         Get job by job_id
@@ -100,6 +102,15 @@ class SpiderJobResource:
             del parameters['schedule']
         except KeyError:
             pass
+
+        # Check parameters
+        if set(parameters.keys()) & SpiderJobResource.JOB_PARAMETER_RESERVED_KEYWORDS:
+            response.body = json.dumps(
+                {'status': 'error',
+                 'message': 'Parameter must not be in reserved keywords {}'.format(
+                     SpiderJobResource.JOB_PARAMETER_RESERVED_KEYWORDS)})
+            response.status = falcon.HTTP_200
+            return
 
         # Check spider
         try:

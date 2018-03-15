@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  redis:
+    build:
+      context: .
+      dockerfile: ./compose/redis/Dockerfile
+    volumes:
+      - .redis:/data
+    ports:
+      - '6379:6379'
+
+  server:
+    build:
+      context: .
+      dockerfile: ./compose/server/develop/Dockerfile
+    depends_on:
+      - redis
+    links:
+      - scrapyd
+    volumes:
+      - .:/app:ro
+      - .server:/data
+      - ~/.ssh:/root/.ssh:ro
+    environment:
+      - GUNICORN_ARGS=--reload -b 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+
+  scrapyd:
+    build:
+      context: .
+      dockerfile: ./compose/scrapyd/Dockerfile
+    volumes:
+      - .scrapyd:/scrapyd/data
+      - ~/.google:/root/.google
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.google/WealthDashboard-f8fd68bdf873.json
+    ports:
+      - "6800:6800"

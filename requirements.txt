@@ -1,0 +1,11 @@
+falcon==1.4.1
+celery==4.1.0
+celery-redbeat==0.11.1
+redis==2.10.6
+
+peewee==3.1.5
+
+Scrapy==1.5.0
+scrapyd==1.2.0
+
+google-cloud-datastore==1.6.0

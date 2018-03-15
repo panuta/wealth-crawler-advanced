@@ -5,9 +5,9 @@ from server.celery_app import app
 
 
 @app.task
-def crawl(spider_name, job_id):
+def crawl(project_name, spider_name, job_id):
     resp = requests.post('{scrapyd_url}/schedule.json'.format(scrapyd_url=config.SCRAPYD_URL), params={
-        'project': config.SCRAPY_PROJECT_NAME,
+        'project': project_name,
         'spider': spider_name,
         'job_id': job_id,
     })

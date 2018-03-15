@@ -8,9 +8,9 @@ from datetime import datetime
 
 from git import Repo, GitCommandError
 
-from server.controller.models import Spider
-from . import utils
 from server import config
+from server.controller.models import Spider
+from server.utils import load_module_from_file
 
 
 def pred(c):
@@ -28,7 +28,7 @@ def _persist_spiders(clone_path, project_name):
     if not os.path.isfile(scrapy_settings_filepath):
         raise Exception('Scrapy settings is missing')
 
-    scrapy_settings = utils.load_module_from_file('scrapy_settings', scrapy_settings_filepath)
+    scrapy_settings = load_module_from_file('scrapy_settings', scrapy_settings_filepath)
     spider_modules = set(getattr(scrapy_settings, 'SPIDER_MODULES', []))
 
     # Find spiders in SPIDER_MODULES
@@ -36,7 +36,7 @@ def _persist_spiders(clone_path, project_name):
 
     for spider_module_name in spider_modules:
         module_filepath = os.path.join(clone_path, '{}.py'.format(spider_module_name.replace('.', '/')))
-        spider_module = utils.load_module_from_file(
+        spider_module = load_module_from_file(
             spider_module_name, module_filepath, sys_path=clone_path)
 
         classmembers = inspect.getmembers(spider_module, inspect.isclass)

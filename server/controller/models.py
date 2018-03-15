@@ -88,8 +88,8 @@ class SpiderJobLog(Model):
             'parameters': self.parameters,
             'task_id': self.task_id,
             'status': self.status,
-            'date_started': datetime_to_str(self.date_started) if self.date_started,
-            'date_finished': datetime_to_str(self.date_finished) if self.date_finished,
+            'date_started': datetime_to_str(self.date_started) if self.date_started else None,
+            'date_finished': datetime_to_str(self.date_finished) if self.date_finished else None,
         }
 
     @classmethod

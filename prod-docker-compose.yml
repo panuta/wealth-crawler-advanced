@@ -1,0 +1,43 @@
+version: '2'
+
+services:
+  redis:
+    build:
+      context: .
+      dockerfile: ./compose/redis/Dockerfile
+    volumes:
+      - .redis:/data
+    ports:
+      - '6379:6379'
+
+  server:
+    build:
+      context: .
+      dockerfile: ./compose/server/production/Dockerfile
+    depends_on:
+      - redis
+    links:
+      - scrapyd
+    volumes:
+      - .:/app:ro
+      - .server:/data
+      - ~/.ssh:/root/.ssh:ro
+    restart: always
+    environment:
+      - GUNICORN_ARGS=--workers 2 -b 0.0.0.0:80
+    expose:
+      - 80
+    ports:
+      - "80:80"
+
+  scrapyd:
+    build:
+      context: .
+      dockerfile: ./compose/scrapyd/Dockerfile
+    links:
+      - redis
+    volumes:
+      - .scrapyd:/scrapyd/data
+    restart: always
+    ports:
+      - "6800:6800"
